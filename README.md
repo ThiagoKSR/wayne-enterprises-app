@@ -8,9 +8,9 @@ O sistema permite que usuários com diferentes níveis de permissão (ex: 'Funci
 
 *(Recomendação: Tire screenshots da sua aplicação e coloque-as aqui. Por exemplo: a tela de login, o dashboard com a tabela e o modal de edição, e a página de gráficos.)*
 
-![Tela de Login](caminho/para/seu/screenshot_login.png)
-![Dashboard de Recursos](caminho/para/seu/screenshot_dashboard.png)
-![Página de Gráficos](caminho/para/seu/screenshot_graficos.png)
+![Tela de Login]("C:\Users\thiag\wayne-enterprises-app\docs\images\dashboard.png")
+![Dashboard de Recursos]("C:\Users\thiag\wayne-enterprises-app\docs\images\graficos.png")
+![Página de Gráficos]("C:\Users\thiag\wayne-enterprises-app\docs\images\login.png")
 
 ## Funcionalidades Implementadas
 
@@ -67,5 +67,11 @@ Siga os passos abaixo para configurar e executar o projeto na sua máquina.
 
 ### 1. Clonar o Repositório
 ```bash
-git clone [https://github.com/seu-usuario/seu-repositorio.git](https://github.com/seu-usuario/seu-repositorio.git)
+git clone https://github.com/ThiagoKSR/wayne-enterprises-app.git
+cd wayne-enterprises-app
 cd seu-repositorio
+
+4.  **Configurar o Banco de Dados:**
+    * Abra o seu cliente MySQL (MySQL Workbench, etc.).
+    * Execute o script `backend/schema.sql` para criar o banco de dados `wayne_industries` e popular as tabelas com dados de exemplo.
+    * Abra o arquivo `backend/app.py` e edite o dicionário `db_config` com o seu usuário e senha do MySQL.

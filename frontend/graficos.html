@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wayne Enterprises | Gráficos</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <h1>Visualização de Dados</h1>
+            <button id="logout-button" class="btn-logout">Sair</button>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="toolbar">
+            <h2>Distribuição de Recursos por Status</h2>
+            <a href="dashboard.html" class="btn-secondary">Voltar ao Dashboard</a>
+        </div>
+        
+        <div class="chart-container">
+            <canvas id="statusChart"></canvas>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/graficos.js"></script>
+</body>
+</html>

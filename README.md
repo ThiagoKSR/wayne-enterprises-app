@@ -6,9 +6,9 @@ O sistema permite que usuários com diferentes níveis de permissão (ex: 'Funci
 
 ## Demonstração (Screenshots)
 
-![Tela de Login]("C:\Users\thiag\wayne-enterprises-app\docs\images\dashboard.png")
-![Dashboard de Recursos]("C:\Users\thiag\wayne-enterprises-app\docs\images\graficos.png")
-![Página de Gráficos]("C:\Users\thiag\wayne-enterprises-app\docs\images\login.png")
+![Tela de Login](docs/images/login.png)
+![Dashboard de Recursos](docs/images/dashboard.png)
+![Página de Gráficos](docs/images/graficos.png)
 
 ## Funcionalidades Implementadas
 
@@ -64,12 +64,64 @@ Siga os passos abaixo para configurar e executar o projeto na sua máquina.
 * Git
 
 ### 1. Clonar o Repositório
+No seu terminal, clone o repositório e entre na pasta do projeto.
 ```bash
-git clone https://github.com/ThiagoKSR/wayne-enterprises-app.git
+git clone [https://github.com/ThiagoKSR/wayne-enterprises-app.git](https://github.com/ThiagoKSR/wayne-enterprises-app.git)
 cd wayne-enterprises-app
-cd seu-repositorio
+```
 
-4.  **Configurar o Banco de Dados:**
-    * Abra o seu cliente MySQL (MySQL Workbench, etc.).
-    * Execute o script `backend/schema.sql` para criar o banco de dados `wayne_industries` e popular as tabelas com dados de exemplo.
-    * Abra o arquivo `backend/app.py` e edite o dicionário `db_config` com o seu usuário e senha do MySQL.
+### 2. Configurar o Back-end
+O servidor Python (Flask) e o banco de dados.
+
+**Configurar o Banco de Dados:**
+1.  Abra o seu cliente MySQL (MySQL Workbench, etc.).
+2.  Execute o script `backend/schema.sql` para criar o banco de dados `wayne_industries` e popular as tabelas com dados de exemplo.
+3.  Abra o arquivo `backend/app.py` e edite o dicionário `db_config` com o seu usuário e senha do MySQL.
+
+**Instalar Dependências e Ativar o Ambiente:**
+1.  Navegue até a pasta `backend/`:
+    ```bash
+    cd backend
+    ```
+2.  Crie e ative um ambiente virtual:
+    ```bash
+    # Windows
+    python -m venv venv
+    venv\Scripts\activate
+
+    # macOS/Linux
+    python3 -m venv venv
+    source venv/bin/activate
+    ```
+3.  Enquanto estiver na pasta `backend/`, instale as dependências (o `requirements.txt` está na pasta anterior, por isso `../`):
+    ```bash
+    pip install -r ../requirements.txt
+    ```
+
+**Iniciar o Servidor Back-end:**
+1.  Certifique-se de que você está na pasta `backend/` e o `(venv)` está ativo.
+2.  Execute o Flask:
+    ```bash
+    flask --app app --debug run
+    ```
+3.  O servidor estará a rodar em `http://127.0.0.1:5000`.
+
+### 3. Configurar o Front-end
+O site (HTML/CSS/JS) que o usuário vê.
+
+1.  Abra uma **nova** janela de terminal (deixe o back-end a rodar no terminal antigo).
+2.  Navegue até a pasta raiz do projeto (`wayne-enterprises-app`).
+3.  A forma mais fácil de executar o front-end é usando a extensão **Live Server** do VS Code.
+4.  No VS Code, clique com o botão direito no arquivo `frontend/index.html` (a sua página de login) e escolha "Open with Live Server".
+5.  A aplicação abrirá no seu navegador e você poderá fazer o login e interagir com o sistema.
+
+## API Endpoints
+A API back-end expõe os seguintes endpoints:
+
+* `POST /api/login`: Autentica um usuário e retorna um token JWT.
+* `GET /api/recursos`: Retorna a lista de todos os recursos (rota protegida).
+* `GET /api/recursos/<id>`: Retorna os detalhes de um único recurso (rota protegida).
+* `POST /api/recursos`: Adiciona um novo recurso (rota protegida, requer permissão).
+* `PUT /api/recursos/<id>`: Atualiza um recurso existente (rota protegida, requer permissão).
+* `DELETE /api/recursos/<id>`: Deleta um recurso (rota protegida, requer permissão de admin).
+* `GET /api/stats`: Retorna dados agregados para os gráficos (rota protegida).

@@ -6,8 +6,6 @@ O sistema permite que usuários com diferentes níveis de permissão (ex: 'Funci
 
 ## Demonstração (Screenshots)
 
-*(Recomendação: Tire screenshots da sua aplicação e coloque-as aqui. Por exemplo: a tela de login, o dashboard com a tabela e o modal de edição, e a página de gráficos.)*
-
 ![Tela de Login]("C:\Users\thiag\wayne-enterprises-app\docs\images\dashboard.png")
 ![Dashboard de Recursos]("C:\Users\thiag\wayne-enterprises-app\docs\images\graficos.png")
 ![Página de Gráficos]("C:\Users\thiag\wayne-enterprises-app\docs\images\login.png")

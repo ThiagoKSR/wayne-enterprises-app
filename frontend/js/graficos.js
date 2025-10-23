@@ -2,19 +2,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('token');
     const logoutButton = document.getElementById('logout-button');
 
-    // Proteção da Rota: Se não há token, expulsa o usuário
     if (!token) {
         window.location.href = 'index.html';
         return;
     }
 
-    // Lógica de Logout (igual à do dashboard)
     logoutButton.addEventListener('click', () => {
         localStorage.removeItem('token');
         window.location.href = 'index.html';
     });
 
-    // Função para renderizar o gráfico
     const renderStatusChart = async () => {
         try {
             const response = await fetch('http://127.0.0.1:5000/api/stats', {
@@ -50,6 +47,5 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Executa a função para desenhar o gráfico assim que a página carrega
     renderStatusChart();
 });

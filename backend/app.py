@@ -5,22 +5,20 @@ from mysql.connector import Error
 import bcrypt
 import jwt
 from datetime import datetime, timedelta
-from functools import wraps # Nova importação
+from functools import wraps
 
-# --- CONFIGURAÇÃO DA APLICAÇÃO ---
 app = Flask(__name__)
 CORS(app)
-app.config['SECRET_KEY'] = 'sua-chave-secreta-super-dificil'
+app.config['SECRET_KEY'] = ''
 
-# --- CONFIGURAÇÃO DO BANCO DE DADOS ---
 db_config = {
     'host': 'localhost',
     'user': 'root',
-    'password': '254600', # ⚠️ Lembre-se de usar sua senha
+    'password': '254600', # Não posso esquecer de utilizar a senha para acesso ao BD!!!
     'database': 'wayne_industries'
 }
 
-# --- FUNÇÃO PARA CONECTAR AO BANCO ---
+# Conecta ao banco de dados MySQL
 def get_db_connection():
     try:
         conn = mysql.connector.connect(**db_config)
@@ -29,7 +27,7 @@ def get_db_connection():
         print(f"Erro ao conectar ao MySQL: {e}")
         return None
 
-# --- DECORADOR PARA PROTEGER ROTAS ---
+# Decorador infeliz que me fez passar raiva =X
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
@@ -42,12 +40,10 @@ def token_required(f):
             return jsonify({'message': 'Token é obrigatório!'}), 401
 
         try:
-            # Decodifica o token usando nossa SECRET_KEY
+            # Decodifica o token usando uma secret key
             data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
-            # Busca o usuário no banco com o id que estava no token
             conn = get_db_connection()
             cursor = conn.cursor(dictionary=True)
-            # Dentro do decorador token_required, mude a linha da query para:
             cursor.execute("SELECT id, nome, id_papel FROM usuarios WHERE id = %s", (data['user_id'],))
             current_user = cursor.fetchone()
             cursor.close()
@@ -57,12 +53,10 @@ def token_required(f):
         except Exception as e:
             return jsonify({'message': 'Token é inválido!'}), 401
         
-        # Se tudo deu certo, a rota original (f) é executada
-        # e passamos o usuário logado como parâmetro
         return f(current_user, *args, **kwargs)
     return decorated
 
-# --- ROTA DE LOGIN ---
+# Rota de login 
 @app.route('/api/login', methods=['POST'])
 def login():
     data = request.get_json()
@@ -92,12 +86,11 @@ def login():
         cursor.close()
         conn.close()
 
-# --- NOVA ROTA PROTEGIDA PARA LISTAR RECURSOS ---
+# Nova rota protegida para listar recursos
 @app.route('/api/recursos', methods=['GET'])
-@token_required # <-- A MÁGICA ACONTECE AQUI!
-def get_all_recursos(current_user): # A função agora recebe o usuário que foi validado pelo decorador
-    # Se chegamos até aqui, o token é válido e current_user contém os dados do usuário logado.
-    print(f"Usuário '{current_user['nome']}' acessou os recursos.") # Log no terminal
+@token_required
+def get_all_recursos(current_user): 
+    print(f"Usuário '{current_user['nome']}' acessou os recursos.")
 
     conn = get_db_connection()
     if not conn:
@@ -111,7 +104,7 @@ def get_all_recursos(current_user): # A função agora recebe o usuário que foi
     
     return jsonify(recursos)
 
-# --- ROTA PARA CRIAR UM RECURSO (COM DEBUG) ---
+# Rota para criar um recurso OBS: Com Debug
 @app.route('/api/recursos', methods=['POST'])
 @token_required
 def create_recurso(current_user):
@@ -161,7 +154,7 @@ def create_recurso(current_user):
         conn.close()
         print("--- FINALIZANDO REQUEST ---\n") # DEBUG
 
-        # --- NOVA ROTA PARA ATUALIZAR UM RECURSO (UPDATE) ---
+        # Nova rota para atualizar um recurso. OBS: A antiga deu mais errado que meus planos para esse projeto.
 @app.route('/api/recursos/<int:id>', methods=['PUT'])
 @token_required
 def update_recurso(current_user, id):
@@ -176,7 +169,7 @@ def update_recurso(current_user, id):
     cursor = conn.cursor(dictionary=True)
     
     try:
-        # Primeiro, verifica se o recurso existe
+        # Verifica se o recurso existe
         cursor.execute("SELECT * FROM recursos WHERE id = %s", (id,))
         recurso_existente = cursor.fetchone()
         if not recurso_existente:
@@ -206,11 +199,11 @@ def update_recurso(current_user, id):
         cursor.close()
         conn.close()
 
-        # --- NOVA ROTA PARA DELETAR UM RECURSO (DELETE) ---
+        # Rota para deletar um recurso
 @app.route('/api/recursos/<int:id>', methods=['DELETE'])
 @token_required
 def delete_recurso(current_user, id):
-    # Autorização: Apenas Administradores (3) podem deletar.
+    # Autorização: Apenas Administradores podem deletar.
     if current_user['id_papel'] != 3:
         return jsonify({'message': 'Permissão negada! Apenas administradores podem deletar recursos.'}), 403
 
@@ -221,13 +214,11 @@ def delete_recurso(current_user, id):
     cursor = conn.cursor()
     
     try:
-        # Primeiro, verifica se o recurso existe
         cursor.execute("SELECT * FROM recursos WHERE id = %s", (id,))
         recurso_existente = cursor.fetchone()
         if not recurso_existente:
             return jsonify({'message': 'Recurso não encontrado'}), 404
 
-        # Query SQL para deletar o recurso
         query = "DELETE FROM recursos WHERE id = %s"
         cursor.execute(query, (id,))
         conn.commit()
@@ -242,7 +233,7 @@ def delete_recurso(current_user, id):
         cursor.close()
         conn.close()
 
-# --- ROTA PARA BUSCAR UM ÚNICO RECURSO POR ID ---
+# Rota para obter um recurso por ID
 @app.route('/api/recursos/<int:id>', methods=['GET'])
 @token_required
 def get_recurso_por_id(current_user, id):
@@ -261,7 +252,7 @@ def get_recurso_por_id(current_user, id):
     else:
         return jsonify({"message": "Recurso não encontrado"}), 404
     
-    # --- NOVA ROTA PARA ESTATÍSTICAS DO DASHBOARD ---
+# Nova rota para obter estatísticas dos recursos
 @app.route('/api/stats', methods=['GET'])
 @token_required
 def get_stats(current_user):
@@ -273,13 +264,9 @@ def get_stats(current_user):
     
     cursor = conn.cursor(dictionary=True)
     try:
-        # Query que agrupa os recursos por status e conta quantos há em cada grupo
         query = "SELECT status, COUNT(*) as count FROM recursos GROUP BY status"
         cursor.execute(query)
         stats = cursor.fetchall()
-        
-        # A resposta da query será algo como: 
-        # [{'status': 'Operacional', 'count': 8}, {'status': 'Em Manutenção', 'count': 4}]
         
         return jsonify(stats)
 
@@ -289,6 +276,6 @@ def get_stats(current_user):
     finally:
         cursor.close()
         conn.close()
-# --- PONTO DE ENTRADA ---
+# Essa caceta aqui roda o app
 if __name__ == '__main__':
     app.run(debug=True)

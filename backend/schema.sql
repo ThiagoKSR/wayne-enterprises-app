@@ -39,9 +39,9 @@ ON DUPLICATE KEY UPDATE nome_papel=VALUES(nome_papel);
 -- Insere usuários de exemplo
 -- A senha para todos é 'batman' (o hash pode precisar ser gerado novamente como fizemos)
 INSERT INTO usuarios (id, nome, email, senha_hash, id_papel) VALUES
-(1, 'Bruce Wayne', 'bruce@wayne-enterprises.com', '$2b$12$EixZa4e85d8senha_hashg2d21UuSynuPg7a0sL7GkAPrSFLh92.a02qgI/3ZfG', 3),
-(2, 'Lucius Fox', 'lucius@wayne-enterprises.com', '$2b$12$EixZa4e85d8g2d21UuSynuPg7a0sL7GkAPrSFLh92.a02qgI/3ZfG', 2),
-(3, 'John Doe', 'john.d@wayne-enterprises.com', '$2b$12$EixZa4e85d8g2d21UuSynuPg7a0sL7GkAPrSFLh92.a02qgI/3ZfG', 1)
+(1, 'Bruce Wayne', 'bruce@wayne-enterprises.com', '$2b$12$ihkfATwWpCIC8L7mugAXkeVPabbjfgFQt76tWVvVzikV8xAP.MfC6', 3),
+(2, 'Lucius Fox', 'lucius@wayne-enterprises.com', '$2b$12$ihkfATwWpCIC8L7mugAXkeVPabbjfgFQt76tWVvVzikV8xAP.MfC6', 2),
+(3, 'John Doe', 'john.d@wayne-enterprises.com', '$2b$12$ihkfATwWpCIC8L7mugAXkeVPabbjfgFQt76tWVvVzikV8xAP.MfC6', 1)
 ON DUPLICATE KEY UPDATE nome=VALUES(nome);
 
 -- Insere recursos de exemplo
